@@ -38,3 +38,25 @@ describe('Renderiza um card com as informações de determinado pokémon', () =>
     );
   });
 });
+
+describe('O card do Pokémon indicado na Pokédex contém um link detalhes', () => {
+  test('O link deve possuir a URL com id do Pokémon exibido', () => {
+    const { getByText } = renderWithRouter(<App />);
+    const linkMoreDetails = getByText('More details');
+    const { id } = pokemons[0];
+    expect(linkMoreDetails).toHaveAttribute(
+      'href',
+      `/pokemons/${id}`,
+    );
+  });
+});
+
+describe('Clicar no link de navegação do Pokémon, Rediriona para a página de detalhes', () => {
+  test('Redirecionamento', () => {
+    const { getByText } = renderWithRouter(<App />);
+    const linkMoreDetails = getByText('More details');
+    const { name } = pokemons[0];
+    userEvent.click(linkMoreDetails);
+    expect(getByText(name)).toBeInTheDocument();
+  });
+});
