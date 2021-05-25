@@ -1,4 +1,6 @@
 import React from 'react';
+import userEvent from '@testing-library/user-event';
+import { screen } from '@testing-library/react';
 import App from '../App';
 import renderWithRouter from './renderWithRouter';
 
@@ -35,5 +37,16 @@ describe('o topo da aplicação contém um conjunto fixo de links de navegação
     const route = '/';
     history.push(route);
     expect(getByText('Favorite Pokémons')).toBeInTheDocument();
+  });
+});
+
+describe('aplicação é redirecionada para a página inicial, na URL / ao clicar no link Home da barra de navegação', () => {
+  test('', () => {
+    const { getByText } = renderWithRouter(<App />);
+    const homeLink = screen.getByRole('link', {
+      name: /Home/i,
+    });
+    userEvent.click(homeLink);
+    expect(getByText('Encountered pokémons')).toBeInTheDocument();
   });
 });
