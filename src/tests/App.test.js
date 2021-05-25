@@ -62,7 +62,7 @@ describe('redireciona para a página About, na URL /about ao clicar no link Abou
   });
 });
 
-describe('redireciona para a página Pokémons Favoritados, na URL /favorites ao clicar no link Favorite Pokémons', () => {
+describe('redireciona para Pokémons Favoritados ao clicar em Favorite Pokémons', () => {
   test('Encontra o texto About Pokédex na página', () => {
     const { getByText } = renderWithRouter(<App />);
     const aboutLink = screen.getByRole('link', {
