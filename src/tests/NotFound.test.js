@@ -1,6 +1,4 @@
 import React from 'react';
-import userEvent from '@testing-library/user-event';
-import FavoritePokemons from '../components/FavoritePokemons';
 import renderWithRouter from './renderWithRouter';
 import NotFound from '../components/NotFound';
 
