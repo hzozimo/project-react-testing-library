@@ -40,7 +40,7 @@ describe('o topo da aplicação contém um conjunto fixo de links de navegação
   });
 });
 
-describe('aplicação é redirecionada para a página inicial, na URL / ao clicar no link Home da barra de navegação', () => {
+describe('redireciona para a página inicial, na URL / ao clicar no link Home', () => {
   test('', () => {
     const { getByText } = renderWithRouter(<App />);
     const homeLink = screen.getByRole('link', {
