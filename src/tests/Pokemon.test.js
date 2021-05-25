@@ -51,7 +51,7 @@ describe('O card do Pokémon indicado na Pokédex contém um link detalhes', () 
   });
 });
 
-describe('Clicar no link de navegação do Pokémon, Rediriona para a página de detalhes', () => {
+describe('Clicar no link redireciona para a página de detalhes', () => {
   test('Redirecionamento', () => {
     const { getByText } = renderWithRouter(<App />);
     const linkMoreDetails = getByText('More details');
