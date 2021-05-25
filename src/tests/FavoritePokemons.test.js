@@ -27,3 +27,19 @@ describe('Teste se é exibido todos os cards de pokémons favoritados', () => {
     expect(getByText('Charmander')).toBeInTheDocument();
   });
 });
+
+describe('Nenhum card de pokémon é exibido, se ele não estiver favoritado', () => {
+  test('Mensagem de erro se a pessoa não tiver pokémons favoritos', () => {
+    const { getByText, history } = renderWithRouter(<App />);
+    const route = '/pokemons/25';
+    history.push(route);
+    const favorited = getByText('Pokémon favoritado?');
+    userEvent.click(favorited);
+    const route2 = '/pokemons/4';
+    history.push(route2);
+    userEvent.click(favorited);
+    const route3 = '/favorites';
+    history.push(route3);
+    expect(getByText('No favorite pokemon found')).toBeInTheDocument();
+  });
+});
