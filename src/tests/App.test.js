@@ -41,12 +41,43 @@ describe('o topo da aplicação contém um conjunto fixo de links de navegação
 });
 
 describe('redireciona para a página inicial, na URL / ao clicar no link Home', () => {
-  test('', () => {
+  test('Encontra o texto Encountered pokémons na página', () => {
     const { getByText } = renderWithRouter(<App />);
     const homeLink = screen.getByRole('link', {
       name: /Home/i,
     });
     userEvent.click(homeLink);
     expect(getByText('Encountered pokémons')).toBeInTheDocument();
+  });
+});
+
+describe('redireciona para a página About, na URL /about ao clicar no link About', () => {
+  test('Encontra o texto About Pokédex na página', () => {
+    const { getByText } = renderWithRouter(<App />);
+    const aboutLink = screen.getByRole('link', {
+      name: /About/i,
+    });
+    userEvent.click(aboutLink);
+    expect(getByText('About Pokédex')).toBeInTheDocument();
+  });
+});
+
+describe('redireciona para a página Pokémons Favoritados, na URL /favorites ao clicar no link Favorite Pokémons', () => {
+  test('Encontra o texto About Pokédex na página', () => {
+    const { getByText } = renderWithRouter(<App />);
+    const aboutLink = screen.getByRole('link', {
+      name: /Favorite Pokémons/i,
+    });
+    userEvent.click(aboutLink);
+    expect(getByText('Favorite Pokémons')).toBeInTheDocument();
+  });
+});
+
+describe('Redireciona para a página Not Found ao entrar em uma URL desconhecida', () => {
+  test('Texto Page requested not found encontrado', () => {
+    const { getByText, history } = renderWithRouter(<App />);
+    const route = '/url-desconhecida';
+    history.push(route);
+    expect(getByText('Page requested not found')).toBeInTheDocument();
   });
 });
