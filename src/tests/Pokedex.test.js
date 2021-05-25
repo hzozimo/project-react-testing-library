@@ -1,6 +1,6 @@
 import React from 'react';
+import userEvent from '@testing-library/user-event';
 import renderWithRouter from './renderWithRouter';
-import Pokedex from '../components/Pokedex';
 import App from '../App';
 
 test('Teste se página contém um heading h2 com o texto Encountered pokémons', () => {
@@ -17,5 +17,12 @@ describe('É exibido o próximo Pokémon quando o botão Próximo pokémon é cl
     const { getByText } = renderWithRouter(<App />);
     const buttonNext = getByText('Próximo pokémon');
     expect(buttonNext).toBeInTheDocument();
+  });
+  test('Os próximos Pokémons da lista devem ser mostrados', () => {
+    const { getByText } = renderWithRouter(<App />);
+    const buttonNext = getByText('Próximo pokémon');
+    userEvent.click(buttonNext);
+    const pokemon = getByText('Charmander');
+    expect(pokemon).toBeInTheDocument();
   });
 });
