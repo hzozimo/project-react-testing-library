@@ -5,6 +5,7 @@ import App from '../App';
 import pokemons from '../data';
 
 const moreDetails = 'More details';
+const pokemonFavoritado = 'Pokémon favoritado?';
 
 describe('As informações detalhadas do Pokémon selecionado são mostradas na tela', () => {
   test('A página deve conter um texto com o nome do Pokémon', () => {
@@ -12,7 +13,8 @@ describe('As informações detalhadas do Pokémon selecionado são mostradas na 
     const { id, name } = pokemons[0];
     const route = `/pokemons/${id}`;
     history.push(route);
-    expect(getByText(name)).toBeInTheDocument();
+    const pokemonName = getByText(`${name} Details`);
+    expect(pokemonName).toBeInTheDocument();
   });
 
   test('Não deve existir o link de navegação na página', () => {
@@ -103,5 +105,43 @@ describe('Existe na página uma seção com os mapas', () => {
     locationsMapAlt.forEach(
       (locationMapAlt) => expect(locationMapAlt).toBeInTheDocument(),
     );
+  });
+});
+
+describe('O usuário pode favoritar um pokémon através da página de detalhes', () => {
+  test('A página deve exibir um checkbox que permite favoritar o Pokémon', () => {
+    const { history, getByRole } = renderWithRouter(<App />);
+    const { id } = pokemons[0];
+    const route = `/pokemons/${id}`;
+    history.push(route);
+    const favorite = getByRole('checkbox', { name: pokemonFavoritado });
+    expect(favorite).toBeInTheDocument();
+  });
+
+  test(`Cliques alternados no checkbox devem adicionar e remover respectivamente 
+  o Pokémon da lista de favoritos;`, () => {
+    const { history, getByRole, getAllByRole } = renderWithRouter(<App />);
+    const { id } = pokemons[0];
+    const route = `/pokemons/${id}`;
+    history.push(route);
+    const favorite = getByRole('checkbox', { name: pokemonFavoritado });
+    userEvent.click(favorite);
+    const star = getAllByRole('img');
+    expect(star[1]).toHaveAttribute(
+      'src',
+      '/star-icon.svg',
+    );
+    expect(star[1]).toBeInTheDocument();
+    userEvent.click(favorite);
+    expect(star[1]).not.toBeInTheDocument();
+  });
+
+  test('O label do checkbox deve conter o texto Pokémon favoritado?', () => {
+    const { history, getByText } = renderWithRouter(<App />);
+    const { id } = pokemons[0];
+    const route = `/pokemons/${id}`;
+    history.push(route);
+    const favorite = getByText(pokemonFavoritado);
+    expect(favorite).toBeInTheDocument();
   });
 });
