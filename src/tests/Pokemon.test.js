@@ -4,6 +4,8 @@ import renderWithRouter from './renderWithRouter';
 import App from '../App';
 import pokemons from '../data';
 
+const moreDetails = 'More details';
+
 describe('Renderiza um card com as informações de determinado pokémon', () => {
   test('O nome correto do Pokémon deve ser mostrado na tela', () => {
     const { getByTestId } = renderWithRouter(<App />);
@@ -42,7 +44,7 @@ describe('Renderiza um card com as informações de determinado pokémon', () =>
 describe('O card do Pokémon indicado na Pokédex contém um link detalhes', () => {
   test('O link deve possuir a URL com id do Pokémon exibido', () => {
     const { getByText } = renderWithRouter(<App />);
-    const linkMoreDetails = getByText('More details');
+    const linkMoreDetails = getByText(moreDetails);
     const { id } = pokemons[0];
     expect(linkMoreDetails).toHaveAttribute(
       'href',
@@ -54,7 +56,7 @@ describe('O card do Pokémon indicado na Pokédex contém um link detalhes', () 
 describe('Clicar no link redireciona para a página de detalhes', () => {
   test('Redirecionamento', () => {
     const { getByText } = renderWithRouter(<App />);
-    const linkMoreDetails = getByText('More details');
+    const linkMoreDetails = getByText(moreDetails);
     const { name } = pokemons[0];
     userEvent.click(linkMoreDetails);
     expect(getByText(name)).toBeInTheDocument();
@@ -64,7 +66,7 @@ describe('Clicar no link redireciona para a página de detalhes', () => {
 describe('A URL muda para contendo a ID do pokemon', () => {
   test('id encontrada', () => {
     const { getByText, history } = renderWithRouter(<App />);
-    const linkMoreDetails = getByText('More details');
+    const linkMoreDetails = getByText(moreDetails);
     const { id } = pokemons[0];
     userEvent.click(linkMoreDetails);
     const { pathname } = history.location;
@@ -73,10 +75,9 @@ describe('A URL muda para contendo a ID do pokemon', () => {
 });
 
 describe('Teste se existe um ícone de estrela nos Pokémons favoritados.', () => {
-  test('Estrela encontrada', () => {
+  test('Estrela encontrada com src correto', () => {
     const { getByText, getAllByRole } = renderWithRouter(<App />);
-    const linkMoreDetails = getByText('More details');
-    const { id } = pokemons[0];
+    const linkMoreDetails = getByText(moreDetails);
     userEvent.click(linkMoreDetails);
     const pokemonFavoritado = getByText('Pokémon favoritado?');
     userEvent.click(pokemonFavoritado);
@@ -86,5 +87,17 @@ describe('Teste se existe um ícone de estrela nos Pokémons favoritados.', () =
       '/star-icon.svg',
     );
     expect(star[1]).toBeInTheDocument();
+  });
+
+  test('Estrela encontrada com alt correto', () => {
+    const { getByText, getAllByRole } = renderWithRouter(<App />);
+    const linkMoreDetails = getByText('More details');
+    const { name } = pokemons[0];
+    userEvent.click(linkMoreDetails);
+    const star = getAllByRole('img');
+    expect(star[1]).toHaveAttribute(
+      'alt',
+      `${name} is marked as favorite`,
+    );
   });
 });
