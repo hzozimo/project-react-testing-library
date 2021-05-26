@@ -58,8 +58,50 @@ describe('Existe na página uma seção com os mapas', () => {
     expect(locationsTitle).toBeInTheDocument();
   });
 
-  test(`Todas as localizações do Pokémon 
-  devem ser mostradas na seção de detalhes`, () => {
+  test(`Todas as localizações do Pokémon devem ser mostradas na 
+  seção de detalhes`, () => {
+    const { history, getByText } = renderWithRouter(<App />);
+    const { id, foundAt } = pokemons[0];
+    const route = `/pokemons/${id}`;
+    history.push(route);
+    const locationsText = foundAt.map(({ location }) => getByText(location));
+    locationsText.forEach((location) => expect(location).toBeInTheDocument());
+  });
 
+  test(`Devem ser exibidos, o nome da localização e uma imagem do mapa 
+  em cada localização`, () => {
+    const { history, getByText, getAllByAltText } = renderWithRouter(<App />);
+    const { id, foundAt } = pokemons[0];
+    const route = `/pokemons/${id}`;
+    history.push(route);
+    const locationsText = foundAt.map(({ location }) => getByText(location));
+    locationsText.forEach((location) => expect(location).toBeInTheDocument());
+    const locationsMap = getAllByAltText(`${pokemons[0].name} location`);
+    locationsMap.forEach((locationMap) => expect(locationMap).toBeInTheDocument());
+  });
+
+  test(`A imagem da localização deve ter um atributo src 
+  com a URL da localização`, () => {
+    const { history, getAllByRole } = renderWithRouter(<App />);
+    const { id, foundAt } = pokemons[0];
+    const route = `/pokemons/${id}`;
+    history.push(route);
+    const image = getAllByRole('img');
+    const src = image.map((el) => el.src);
+    foundAt.forEach(({ map }) => {
+      expect(src).toContain(map);
+    });
+  });
+
+  test(`A imagem da localização deve ter um atributo alt com o 
+  texto <name> location`, () => {
+    const { history, getByText, getAllByAltText } = renderWithRouter(<App />);
+    const { id, foundAt } = pokemons[0];
+    const route = `/pokemons/${id}`;
+    history.push(route);
+    const locationsMapAlt = getAllByAltText(`${pokemons[0].name} location`);
+    locationsMapAlt.forEach(
+      (locationMapAlt) => expect(locationMapAlt).toBeInTheDocument(),
+    );
   });
 });
