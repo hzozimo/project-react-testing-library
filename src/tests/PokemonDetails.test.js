@@ -95,8 +95,8 @@ describe('Existe na página uma seção com os mapas', () => {
 
   test(`A imagem da localização deve ter um atributo alt com o 
   texto <name> location`, () => {
-    const { history, getByText, getAllByAltText } = renderWithRouter(<App />);
-    const { id, foundAt } = pokemons[0];
+    const { history, getAllByAltText } = renderWithRouter(<App />);
+    const { id } = pokemons[0];
     const route = `/pokemons/${id}`;
     history.push(route);
     const locationsMapAlt = getAllByAltText(`${pokemons[0].name} location`);
