@@ -60,3 +60,31 @@ describe('Clicar no link redireciona para a página de detalhes', () => {
     expect(getByText(name)).toBeInTheDocument();
   });
 });
+
+describe('A URL muda para contendo a ID do pokemon', () => {
+  test('id encontrada', () => {
+    const { getByText, history } = renderWithRouter(<App />);
+    const linkMoreDetails = getByText('More details');
+    const { id } = pokemons[0];
+    userEvent.click(linkMoreDetails);
+    const { pathname } = history.location;
+    expect(pathname).toBe(`/pokemons/${id}`);
+  });
+});
+
+describe('Teste se existe um ícone de estrela nos Pokémons favoritados.', () => {
+  test('Estrela encontrada', () => {
+    const { getByText, getAllByRole } = renderWithRouter(<App />);
+    const linkMoreDetails = getByText('More details');
+    const { id } = pokemons[0];
+    userEvent.click(linkMoreDetails);
+    const pokemonFavoritado = getByText('Pokémon favoritado?');
+    userEvent.click(pokemonFavoritado);
+    const star = getAllByRole('img');
+    expect(star[1]).toHaveAttribute(
+      'src',
+      '/star-icon.svg',
+    );
+    expect(star[1]).toBeInTheDocument();
+  });
+});
